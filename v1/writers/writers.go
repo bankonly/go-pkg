@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/bankonly/go-pkg/pkg/v1/stacktrace"
+	"github.com/bankonly/go-pkg/v1/stacktrace"
 )
 
 type Json struct {

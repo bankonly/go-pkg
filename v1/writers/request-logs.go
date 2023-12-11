@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/bankonly/go-pkg/pkg/v1/common"
+	"github.com/bankonly/go-pkg/v1/common"
 	"github.com/google/uuid"
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
