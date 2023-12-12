@@ -37,7 +37,7 @@ func NewRSA(cfg RSAConfig) error {
 		return err
 	}
 
-	cfg.DestinationPath = cfg.DestinationPath + time.Now().Format("2006-01-02 15:04") + "/"
+	cfg.BackupPath = cfg.BackupPath + time.Now().Format("2006-01-02 15:04") + "/"
 
 	// Check if file is already existed
 	if _, err := os.Stat(cfg.DestinationPath + pkFilePath); err == nil {
