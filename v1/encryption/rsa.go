@@ -12,16 +12,15 @@ import (
 )
 
 type RSAConfig struct {
-	PKFilename  string
-	PBKFilename string
+	FIlename    string
 	PKDestPath  string // Private key destination path
 	PBKDeskPath string // Public key destination path
 	BackupPath  string // BackupDir destination path
 }
 
 func NewRSA(cfg RSAConfig) {
-	pkFilePath := cfg.PKFilename
-	pbkFilePath := cfg.PBKFilename
+	pkFilePath := cfg.FIlename + ".rsa"
+	pbkFilePath := cfg.FIlename + ".pub"
 
 	// Generate keypair
 	pk, err := GenerateRSAKeyPair(2048)
@@ -48,7 +47,7 @@ func NewRSA(cfg RSAConfig) {
 			log.Fatal(err)
 		}
 
-		os.WriteFile(cfg.BackupPath+cfg.PKFilename, file, 0700)
+		os.WriteFile(cfg.BackupPath+pkFilePath, file, 0700)
 	}
 
 	if _, err := os.Stat(pbkFilePath); err == nil {
@@ -57,7 +56,7 @@ func NewRSA(cfg RSAConfig) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		os.WriteFile(cfg.BackupPath+cfg.PBKFilename, file, 0700)
+		os.WriteFile(cfg.BackupPath+pbkFilePath, file, 0700)
 	}
 
 	os.Remove(pkFilePath)
