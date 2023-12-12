@@ -37,24 +37,28 @@ func NewRSA(cfg RSAConfig) error {
 	}
 
 	// Check if file is already existed
-	if _, err := os.Stat(cfg.BackupPath + pkFilePath); err == nil {
+	if _, err := os.Stat(cfg.DestinationPath + pkFilePath); err == nil {
 		os.MkdirAll(cfg.BackupPath, 0755)
 
-		file, err := os.ReadFile(cfg.BackupPath + pkFilePath)
+		file, err := os.ReadFile(cfg.DestinationPath + pkFilePath)
 		if err != nil {
 			return err
 		}
 
-		os.WriteFile(cfg.BackupPath+pkFilePath, file, 0755)
+		if err = os.WriteFile(cfg.BackupPath+pkFilePath, file, 0755); err != nil {
+			return err
+		}
 	}
 
-	if _, err := os.Stat(cfg.BackupPath + pbkFilePath); err == nil {
+	if _, err := os.Stat(cfg.DestinationPath + pbkFilePath); err == nil {
 		os.MkdirAll(cfg.BackupPath, 0755)
-		file, err := os.ReadFile(cfg.BackupPath + pbkFilePath)
+		file, err := os.ReadFile(cfg.DestinationPath + pbkFilePath)
 		if err != nil {
 			return err
 		}
-		os.WriteFile(cfg.BackupPath+pbkFilePath, file, 0755)
+		if err = os.WriteFile(cfg.BackupPath+pbkFilePath, file, 0755); err != nil {
+			return err
+		}
 	}
 
 	os.Remove(pkFilePath)
