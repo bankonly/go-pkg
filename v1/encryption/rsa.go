@@ -7,7 +7,64 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
+	"log"
+	"os"
 )
+
+type RSAConfig struct {
+	PKFilename  string
+	PBKFilename string
+	PKDestPath  string // Private key destination path
+	PBKDeskPath string // Public key destination path
+	BackupPath  string // BackupDir destination path
+}
+
+func NewRSA(cfg RSAConfig) {
+	pkFilePath := cfg.PKFilename
+	pbkFilePath := cfg.PBKFilename
+
+	// Generate keypair
+	pk, err := GenerateRSAKeyPair(2048)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	pkStr, err := PrivateKeyToString(pk)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	pbkStr, err := PublicKeyToString(&pk.PublicKey)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Check if file is already existed
+	if _, err := os.Stat(pkFilePath); err == nil {
+		os.MkdirAll(cfg.BackupPath, 0755)
+
+		file, err := os.ReadFile(pkFilePath)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		os.WriteFile(cfg.BackupPath+cfg.PKFilename, file, 0700)
+	}
+
+	if _, err := os.Stat(pbkFilePath); err == nil {
+		os.MkdirAll(cfg.BackupPath, 0755)
+		file, err := os.ReadFile(pbkFilePath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		os.WriteFile(cfg.BackupPath+cfg.PBKFilename, file, 0700)
+	}
+
+	os.Remove(pkFilePath)
+	os.Remove(pbkFilePath)
+	os.WriteFile(pkFilePath, []byte(pkStr), 0700)
+	os.WriteFile(pbkFilePath, []byte(pbkStr), 0755)
+}
 
 // Generate RSA key pair
 func GenerateRSAKeyPair(bits int) (*rsa.PrivateKey, error) {
