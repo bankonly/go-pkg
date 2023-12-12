@@ -12,15 +12,15 @@ import (
 )
 
 type RSAConfig struct {
-	FIlename    string
+	Filename    string
 	PKDestPath  string // Private key destination path
 	PBKDeskPath string // Public key destination path
 	BackupPath  string // BackupDir destination path
 }
 
 func NewRSA(cfg RSAConfig) {
-	pkFilePath := cfg.FIlename + ".rsa"
-	pbkFilePath := cfg.FIlename + ".pub"
+	pkFilePath := cfg.Filename + ".rsa"
+	pbkFilePath := cfg.Filename + ".pub"
 
 	// Generate keypair
 	pk, err := GenerateRSAKeyPair(2048)
