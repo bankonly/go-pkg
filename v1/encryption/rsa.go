@@ -12,10 +12,9 @@ import (
 )
 
 type RSAConfig struct {
-	Filename    string
-	PKDestPath  string // Private key destination path
-	PBKDeskPath string // Public key destination path
-	BackupPath  string // BackupDir destination path
+	Filename        string
+	DestinationPath string // Private key destination path
+	BackupPath      string // BackupDir destination path
 }
 
 func NewRSA(cfg RSAConfig) {
@@ -61,8 +60,8 @@ func NewRSA(cfg RSAConfig) {
 
 	os.Remove(pkFilePath)
 	os.Remove(pbkFilePath)
-	os.WriteFile(pkFilePath, []byte(pkStr), 0700)
-	os.WriteFile(pbkFilePath, []byte(pbkStr), 0755)
+	os.WriteFile(cfg.DestinationPath+pkFilePath, []byte(pkStr), 0700)
+	os.WriteFile(cfg.DestinationPath+pbkFilePath, []byte(pbkStr), 0755)
 }
 
 // Generate RSA key pair
