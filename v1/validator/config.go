@@ -25,4 +25,5 @@ func getErrorField() string {
 
 func New(cfg ValidatorConfig) {
 	validatorConfig = cfg
+	NewValidator()
 }
