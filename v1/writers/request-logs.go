@@ -91,7 +91,7 @@ func PrintLog(requestId string) {
 	logInfo.ResTimeSec = printer.Sprintf("%dms", logInfo.ResTime.UnixMilli()-logInfo.ReqTime.UnixMilli())
 
 	fmt.Println(strings.Repeat("-", 50))
-	log.Println(logInfo.Method+" | Path:", logInfo.Path+" ("+logInfo.ResTimeSec+") "+strconv.Itoa(logInfo.StatusCode)+" "+logInfo.ErrorMessage)
+	log.Println("("+requestId+")"+logInfo.Method+" | Path:", logInfo.Path+" ("+logInfo.ResTimeSec+") "+strconv.Itoa(logInfo.StatusCode)+" "+logInfo.ErrorMessage)
 
 	// Converted to string
 	out, _ := common.JsonStringify(logInfo)
