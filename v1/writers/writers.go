@@ -73,14 +73,14 @@ func (opts *WriterOpts) JSON(data interface{}) {
 		result["request_id"] = opts.RequestId()
 		dt, _ = json.Marshal(result)
 	}
-	opts.Write(dt)
+	go opts.Write(dt)
 }
 
 // Response string
 func (opts *WriterOpts) Message(data string) {
 	opts.w.WriteHeader(opts.code)
 	SetStatusCodeAndMessage(opts.RequestId(), opts.code, data)
-	opts.Write([]byte(data))
+	go opts.Write([]byte(data))
 }
 
 // String response
@@ -88,7 +88,7 @@ func (opts *WriterOpts) BadRequest(message string) {
 	response, _ := json.Marshal(&MessageOpts{RequestId: opts.RequestId(), Message: message})
 	opts.w.WriteHeader(400)
 	SetStatusCodeAndMessage(opts.RequestId(), 400, message)
-	opts.Write(response)
+	go opts.Write(response)
 }
 
 // String not found
@@ -96,7 +96,7 @@ func (opts *WriterOpts) NotFound(message string) {
 	response, _ := json.Marshal(&MessageOpts{RequestId: opts.RequestId(), Message: message})
 	opts.w.WriteHeader(404)
 	SetStatusCodeAndMessage(opts.RequestId(), 404, message)
-	opts.Write(response)
+	go opts.Write(response)
 }
 
 // Http internal server error
@@ -104,7 +104,7 @@ func (opts *WriterOpts) InternalServerError(message string) {
 	response, _ := json.Marshal(&MessageOpts{RequestId: opts.RequestId(), Message: message})
 	opts.w.WriteHeader(500)
 	SetStatusCodeAndMessage(opts.RequestId(), 500, message)
-	opts.Write(response)
+	go opts.Write(response)
 }
 
 // Http Forbidden
@@ -112,7 +112,7 @@ func (opts *WriterOpts) Forbidden(message string) {
 	response, _ := json.Marshal(&MessageOpts{RequestId: opts.RequestId(), Message: message})
 	opts.w.WriteHeader(403)
 	SetStatusCodeAndMessage(opts.RequestId(), 403, message)
-	opts.Write(response)
+	go opts.Write(response)
 }
 
 // Http Forbidden
@@ -120,7 +120,7 @@ func (opts *WriterOpts) Unauthorized(message string) {
 	response, _ := json.Marshal(&MessageOpts{RequestId: opts.RequestId(), Message: message})
 	opts.w.WriteHeader(401)
 	SetStatusCodeAndMessage(opts.RequestId(), 401, message)
-	opts.Write(response)
+	go opts.Write(response)
 }
 
 // Http Forbidden
@@ -128,7 +128,7 @@ func (opts *WriterOpts) TooManyRequest(message string) {
 	response, _ := json.Marshal(&MessageOpts{RequestId: opts.RequestId(), Message: message})
 	opts.w.WriteHeader(429)
 	SetStatusCodeAndMessage(opts.RequestId(), 429, message)
-	opts.Write(response)
+	go opts.Write(response)
 }
 
 // Parser error
@@ -152,5 +152,5 @@ func (opts *WriterOpts) ParseError(err error) {
 
 	response, _ := json.Marshal(&MessageOpts{RequestId: opts.RequestId(), Message: message})
 	opts.w.WriteHeader(statusCode)
-	opts.Write(response)
+	go opts.Write(response)
 }
