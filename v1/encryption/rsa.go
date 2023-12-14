@@ -86,8 +86,13 @@ func GenerateRSAKeyPair(bits int) (*rsa.PrivateKey, error) {
 }
 
 // Encrypt RSA
-func EncryptRSA(publicKey *rsa.PublicKey, data []byte) ([]byte, error) {
-	cipherText, err := rsa.EncryptOAEP(sha256.New(), rand.Reader, publicKey, data, nil)
+func EncryptRSA(publicKey string, data []byte) ([]byte, error) {
+	key, err := ParseRSAPublicKeyFromPEM([]byte(publicKey))
+	if err != nil {
+		return nil, err
+	}
+
+	cipherText, err := rsa.EncryptOAEP(sha256.New(), rand.Reader, key, data, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -95,8 +100,13 @@ func EncryptRSA(publicKey *rsa.PublicKey, data []byte) ([]byte, error) {
 }
 
 // Decrypt RSA
-func DecryptRSA(privateKey *rsa.PrivateKey, cipherText []byte) ([]byte, error) {
-	decryptedData, err := rsa.DecryptOAEP(sha256.New(), rand.Reader, privateKey, cipherText, nil)
+func DecryptRSA(privateKey string, cipherText []byte) ([]byte, error) {
+	key, err := ParseRSAPrivateKeyFromPEM([]byte(privateKey))
+	if err != nil {
+		return nil, err
+	}
+
+	decryptedData, err := rsa.DecryptOAEP(sha256.New(), rand.Reader, key, cipherText, nil)
 	if err != nil {
 		return nil, err
 	}
