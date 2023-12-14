@@ -41,7 +41,7 @@ var logs map[string]logInfo = make(map[string]logInfo)
 
 func Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		splitedRequestId := strings.Split(uuid.New().String(), " -")
+		splitedRequestId := strings.Split(uuid.New().String(), "-")
 		requestId := splitedRequestId[len(splitedRequestId)-1]
 
 		logs[requestId] = logInfo{
