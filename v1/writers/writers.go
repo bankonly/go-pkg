@@ -65,10 +65,15 @@ func (opts *WriterOpts) Status(code int) {
 
 // Response json
 func (opts *WriterOpts) JSON(data interface{}) {
-	response, _ := json.Marshal(data)
 	opts.w.WriteHeader(opts.code)
 	SetStatusCodeAndMessage(opts.RequestId(), opts.code, "")
-	opts.Write(response)
+	var result map[string]interface{}
+	dt, _ := json.Marshal(data)
+	if err := json.Unmarshal(dt, &result); err != nil {
+		result["request_id"] = opts.RequestId()
+		dt, _ = json.Marshal(result)
+	}
+	opts.Write(dt)
 }
 
 // Response string
