@@ -69,7 +69,7 @@ func (opts *WriterOpts) JSON(data interface{}) {
 	SetStatusCodeAndMessage(opts.RequestId(), opts.code, "")
 	var result map[string]interface{}
 	dt, _ := json.Marshal(data)
-	if err := json.Unmarshal(dt, &result); err != nil {
+	if err := json.Unmarshal(dt, &result); err == nil {
 		result["request_id"] = opts.RequestId()
 		dt, _ = json.Marshal(result)
 	}
