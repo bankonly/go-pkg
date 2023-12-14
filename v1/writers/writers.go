@@ -14,7 +14,8 @@ type Json struct {
 }
 
 type MessageOpts struct {
-	Message string `json:"message"`
+	RequestId string `json:"request_id"`
+	Message   string `json:"message"`
 }
 
 type Writers interface {
@@ -79,7 +80,7 @@ func (opts *WriterOpts) Message(data string) {
 
 // String response
 func (opts *WriterOpts) BadRequest(message string) {
-	response, _ := json.Marshal(&MessageOpts{Message: message})
+	response, _ := json.Marshal(&MessageOpts{RequestId: opts.RequestId(), Message: message})
 	opts.w.WriteHeader(400)
 	SetStatusCodeAndMessage(opts.RequestId(), 400, message)
 	opts.Write(response)
@@ -87,7 +88,7 @@ func (opts *WriterOpts) BadRequest(message string) {
 
 // String not found
 func (opts *WriterOpts) NotFound(message string) {
-	response, _ := json.Marshal(&MessageOpts{Message: message})
+	response, _ := json.Marshal(&MessageOpts{RequestId: opts.RequestId(), Message: message})
 	opts.w.WriteHeader(404)
 	SetStatusCodeAndMessage(opts.RequestId(), 404, message)
 	opts.Write(response)
@@ -95,7 +96,7 @@ func (opts *WriterOpts) NotFound(message string) {
 
 // Http internal server error
 func (opts *WriterOpts) InternalServerError(message string) {
-	response, _ := json.Marshal(&MessageOpts{Message: message})
+	response, _ := json.Marshal(&MessageOpts{RequestId: opts.RequestId(), Message: message})
 	opts.w.WriteHeader(500)
 	SetStatusCodeAndMessage(opts.RequestId(), 500, message)
 	opts.Write(response)
@@ -103,7 +104,7 @@ func (opts *WriterOpts) InternalServerError(message string) {
 
 // Http Forbidden
 func (opts *WriterOpts) Forbidden(message string) {
-	response, _ := json.Marshal(&MessageOpts{Message: message})
+	response, _ := json.Marshal(&MessageOpts{RequestId: opts.RequestId(), Message: message})
 	opts.w.WriteHeader(403)
 	SetStatusCodeAndMessage(opts.RequestId(), 403, message)
 	opts.Write(response)
@@ -111,7 +112,7 @@ func (opts *WriterOpts) Forbidden(message string) {
 
 // Http Forbidden
 func (opts *WriterOpts) Unauthorized(message string) {
-	response, _ := json.Marshal(&MessageOpts{Message: message})
+	response, _ := json.Marshal(&MessageOpts{RequestId: opts.RequestId(), Message: message})
 	opts.w.WriteHeader(401)
 	SetStatusCodeAndMessage(opts.RequestId(), 401, message)
 	opts.Write(response)
@@ -119,7 +120,7 @@ func (opts *WriterOpts) Unauthorized(message string) {
 
 // Http Forbidden
 func (opts *WriterOpts) TooManyRequest(message string) {
-	response, _ := json.Marshal(&MessageOpts{Message: message})
+	response, _ := json.Marshal(&MessageOpts{RequestId: opts.RequestId(), Message: message})
 	opts.w.WriteHeader(429)
 	SetStatusCodeAndMessage(opts.RequestId(), 429, message)
 	opts.Write(response)
@@ -144,7 +145,7 @@ func (opts *WriterOpts) ParseError(err error) {
 	// Set error logs
 	SetStatusCodeAndMessage(opts.RequestId(), statusCode, message)
 
-	response, _ := json.Marshal(&MessageOpts{Message: message})
+	response, _ := json.Marshal(&MessageOpts{RequestId: opts.RequestId(), Message: message})
 	opts.w.WriteHeader(statusCode)
 	opts.Write(response)
 }
