@@ -99,5 +99,5 @@ func PrintLog(requestId string) {
 	out = strings.ReplaceAll(out, "\\", "")
 	fmt.Println(out)
 
-	delete(logs, requestId) // Delete key.
+	delete(logs, requestId) // Delete key
 }
