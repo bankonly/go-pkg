@@ -16,18 +16,22 @@ type EncryptAESResult struct {
 	IvInfo GenerateIVResult
 }
 
-func EncryptAES(key, plaintext string) (EncryptAESResult, error) {
-	var result EncryptAESResult
+func GenKeyFromByte(key []byte) string {
 	keyByte := []byte(key)
 	md5Hash := md5.Sum(keyByte)
 	md5Key := hex.EncodeToString(md5Hash[:])
+	return md5Key
+}
+
+func EncryptAES(key, plaintext string) (EncryptAESResult, error) {
+	var result EncryptAESResult
 
 	ivInfo, err := GenerateIV() // Generate IV
 	if err != nil {
 		return result, err
 	}
 
-	block, err := aes.NewCipher([]byte(md5Key))
+	block, err := aes.NewCipher([]byte(key))
 	if err != nil {
 		return result, err
 	}
@@ -47,10 +51,7 @@ func EncryptAES(key, plaintext string) (EncryptAESResult, error) {
 }
 
 func DecryptAES(key, cipherText, iv string) (string, error) {
-	keyByte := []byte(key)
-	md5Hash := md5.Sum(keyByte)
-	md5Key := hex.EncodeToString(md5Hash[:])
-	block, err := aes.NewCipher([]byte(md5Key))
+	block, err := aes.NewCipher([]byte(key))
 	if err != nil {
 		return "", err
 	}
