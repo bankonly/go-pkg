@@ -30,6 +30,32 @@ type RSAEncAESRandomKeyResponse struct {
 	EncryptedData *EncryptAESResult
 }
 
+func RSAEncAESRandomKeyClient(publicKey string, data string) (*RSAEncAESRandomKeyResponse, error) {
+	key, err := GenerateRandomAESKey()
+	if err != nil {
+		return nil, err
+	}
+
+	keyStr := GenKeyFromByte(key)
+
+	// Encrypt key
+	encryptedKey, err := EncryptRSA(publicKey, []byte(keyStr))
+	if err != nil {
+		return nil, err
+	}
+
+	// Encrypt Data
+	encryptedData, err := EncryptAES(keyStr, data)
+	if err != nil {
+		return nil, err
+	}
+
+	return &RSAEncAESRandomKeyResponse{
+		EncryptKey:    common.Base64Encode(encryptedKey),
+		EncryptedData: &encryptedData,
+	}, nil
+}
+
 func RSAEncAESRandomKey(data string) (*RSAEncAESRandomKeyResponse, error) {
 	key, err := GenerateRandomAESKey()
 	if err != nil {
