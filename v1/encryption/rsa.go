@@ -66,6 +66,7 @@ func NewRSA(cfg RSAConfig) error {
 
 	os.Remove(pkFilePath)
 	os.Remove(pbkFilePath)
+	os.MkdirAll(cfg.DestinationPath, 0755)
 
 	if err = os.WriteFile(cfg.DestinationPath+pkFilePath, []byte(pkStr), 0755); err != nil {
 		return err
