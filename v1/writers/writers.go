@@ -78,9 +78,10 @@ func (opts *WriterOpts) JSON(data interface{}) {
 
 // Response string
 func (opts *WriterOpts) Message(data string) {
+	response, _ := json.Marshal(&MessageOpts{RequestId: opts.RequestId(), Message: data})
 	opts.w.WriteHeader(opts.code)
 	SetStatusCodeAndMessage(opts.RequestId(), opts.code, data)
-	opts.Write([]byte(data))
+	opts.Write(response)
 }
 
 // String response
