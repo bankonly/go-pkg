@@ -26,13 +26,14 @@ type logInfo struct {
 	ResTime      time.Time   `json:"responseTime"`
 	StatusCode   int         `json:"status_code"`
 	ErrorMessage string      `json:"error_message"`
+	Error        string      `json:"error"`
 	ResTimeSec   string      `json:"responseTimeSec"`
 	Host         string      `json:"host"`
 	Method       string      `json:"method"`
 	Path         string      `json:"path"`
 	Headers      any         `json:"headers"`
 	Body         interface{} `json:"body"`
-	Resonse      interface{} `json:"resonse"`
+	Response     interface{} `json:"response"`
 	Console      []string    `json:"console"`
 	Info         map[string]interface{}
 }
@@ -69,6 +70,13 @@ func Console(requestId string, value string) {
 func AssignLog(requestId string, info map[string]interface{}) {
 	copyLog := logs[requestId]
 	copyLog.Info = info
+	logs[requestId] = copyLog
+}
+
+// Set error message
+func SetError(requestId string, message string) {
+	copyLog := logs[requestId]
+	copyLog.Error = message
 	logs[requestId] = copyLog
 }
 
