@@ -40,7 +40,7 @@ type WriterOpts struct {
 	code int
 }
 
-func Writer(w http.ResponseWriter, r *http.Request) Writers {
+func New(w http.ResponseWriter, r *http.Request) Writers {
 	w.Header().Set("Content-Type", "application/json")
 	return &WriterOpts{w: w, r: r, code: 200}
 }

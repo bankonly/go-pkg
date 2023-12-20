@@ -82,7 +82,7 @@ func RSAEncAESRandomKey(data string) (*RSAEncAESRandomKeyResponse, error) {
 	}, nil
 }
 
-func RSADecAESRandomKey(encryptKey string, cipertext string, iv string) (string, error) {
+func RSADecAESRandomKey(encryptKey string, cipherText string, iv string) (string, error) {
 	keyDecoded, err := common.Base64Decode(encryptKey)
 	if err != nil {
 		return "", err
@@ -95,7 +95,7 @@ func RSADecAESRandomKey(encryptKey string, cipertext string, iv string) (string,
 	}
 
 	// Decrypt data
-	data, err := DecryptAES(string(keyByte), cipertext, iv)
+	data, err := DecryptAES(string(keyByte), cipherText, iv)
 	if err != nil {
 		return "", err
 	}
