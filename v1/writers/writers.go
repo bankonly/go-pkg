@@ -50,7 +50,7 @@ func (opts *WriterOpts) RequestId() string {
 }
 
 func (opts *WriterOpts) Write(data []byte) {
-	opts.w.Header().Set("request-id", opts.RequestId())
+	opts.w.Header().Set("Request-Id", opts.RequestId())
 	go PrintLog(opts.RequestId())
 	opts.w.Write(data)
 }
