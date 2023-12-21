@@ -50,6 +50,7 @@ func (opts *WriterOpts) RequestId() string {
 }
 
 func (opts *WriterOpts) Write(data []byte) {
+	opts.w.Header().Set("request-id", opts.RequestId())
 	go PrintLog(opts.RequestId())
 	opts.w.Write(data)
 }
@@ -67,12 +68,7 @@ func (opts *WriterOpts) Status(code int) {
 func (opts *WriterOpts) JSON(data interface{}) {
 	opts.w.WriteHeader(opts.code)
 	SetStatusCodeAndMessage(opts.RequestId(), opts.code, "")
-	var result map[string]interface{}
 	dt, _ := json.Marshal(data)
-	if err := json.Unmarshal(dt, &result); err == nil {
-		result["request_id"] = opts.RequestId()
-		dt, _ = json.Marshal(result)
-	}
 	opts.Write(dt)
 }
 
