@@ -32,6 +32,7 @@ type Writers interface {
 	Header(string, string)
 	Write([]byte)
 	RequestId() string
+	SessionId() string
 }
 
 type WriterOpts struct {
@@ -47,6 +48,10 @@ func New(w http.ResponseWriter, r *http.Request) Writers {
 
 func (opts *WriterOpts) RequestId() string {
 	return opts.r.Context().Value(RequestLogKey).(string)
+}
+
+func (opts *WriterOpts) SessionId() string {
+	return opts.r.Context().Value("session-id").(string)
 }
 
 func (opts *WriterOpts) Write(data []byte) {
