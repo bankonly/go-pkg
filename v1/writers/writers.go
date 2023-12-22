@@ -14,7 +14,7 @@ type Json struct {
 }
 
 type MessageOpts struct {
-	RequestId string `json:"request_id"`
+	RequestId string `json:"-"`
 	Message   string `json:"message"`
 }
 
