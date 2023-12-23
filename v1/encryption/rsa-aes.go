@@ -2,6 +2,7 @@ package encryption
 
 import (
 	"crypto/rand"
+	"strings"
 
 	"github.com/bankonly/go-pkg/v1/common"
 )
@@ -110,4 +111,22 @@ func GenerateRandomAESKey() ([]byte, error) {
 		return nil, err
 	}
 	return key, nil
+}
+
+func ToAuthorization(enk, data, iv string) string {
+	str := data + "/+8$90" + enk + "/+8$90" + iv
+	return str
+}
+
+func FromAuthorization(cipherText string) (enk, data, iv string) {
+	splitCipherText := strings.Split(cipherText, "/+8$90")
+	if len(splitCipherText) != 3 {
+		return "", "", ""
+	}
+
+	enkResult := splitCipherText[0]
+	dataResult := splitCipherText[1]
+	vector := splitCipherText[2]
+
+	return enkResult, dataResult, vector
 }
