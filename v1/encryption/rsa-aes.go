@@ -118,8 +118,9 @@ func ToAuthorization(enk, data, iv string) string {
 	return str
 }
 
-func FromAuthorization(cipherText string) (enk, data, iv string) {
-	splitCipherText := strings.Split(cipherText, "/+8$90")
+func FromAuthorization(authorization string) (enk, data, iv string) {
+	authorization = strings.Replace(authorization, "Bearer ", "", 1)
+	splitCipherText := strings.Split(authorization, "/+8$90")
 	if len(splitCipherText) != 3 {
 		return "", "", ""
 	}
