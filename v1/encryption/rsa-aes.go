@@ -129,5 +129,5 @@ func FromAuthorization(authorization string) (data, enk, iv string) {
 	enkResult := splitCipherText[1]
 	vector := splitCipherText[2]
 
-	return enkResult, dataResult, vector
+	return dataResult, enkResult, vector
 }
