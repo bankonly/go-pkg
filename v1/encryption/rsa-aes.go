@@ -113,8 +113,8 @@ func GenerateRandomAESKey() ([]byte, error) {
 	return key, nil
 }
 
-func ToAuthorization(enk, data, iv string) string {
-	str := data + "/+8$90" + enk + "/+8$90" + iv
+func ToAuthorization(encryptData *RSAEncAESRandomKeyResponse) string {
+	str := encryptData.EncryptedData.Data + "/+8$90" + encryptData.EncryptKey + "/+8$90" + encryptData.EncryptedData.IvInfo.IvString
 	return str
 }
 
