@@ -8,6 +8,8 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/bankonly/go-pkg/v1/common"
+	"github.com/bankonly/go-pkg/v1/encryption"
 	"github.com/go-playground/validator/v10"
 	"github.com/leebenson/conform"
 )
@@ -50,6 +52,32 @@ func ValidateStruct(value interface{}) error {
 func Parser(body io.Reader, out interface{}) error {
 	if err := json.NewDecoder(body).Decode(&out); err != nil {
 		return errors.New(getBadRequestError())
+	}
+
+	if err := ValidateStruct(out); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Parse validation
+func RsaParser(body io.Reader, out interface{}) error {
+	var data struct {
+		Data string `json:"data"`
+	}
+	if err := json.NewDecoder(body).Decode(&data); err != nil {
+		return errors.New(getBadRequestError())
+	}
+
+	cipherText, enk, iv := encryption.FromAuthorization(data.Data)
+	result, err := encryption.RSADecAESRandomKey(enk, cipherText, iv)
+	if err != nil {
+		return err
+	}
+
+	if err = common.JsonDecode(result, out); err != nil {
+		return err
 	}
 
 	if err := ValidateStruct(out); err != nil {
