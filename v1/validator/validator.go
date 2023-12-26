@@ -70,6 +70,7 @@ func RsaParser(body io.Reader, out interface{}) error {
 		return errors.New(getBadRequestError())
 	}
 
+	log.Println(data.Data)
 	cipherText, enk, iv := encryption.FromAuthorization(data.Data)
 	result, err := encryption.RSADecAESRandomKey(enk, cipherText, iv)
 	if err != nil {
