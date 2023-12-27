@@ -64,3 +64,7 @@ func Base64Decode(encoded string) ([]byte, error) {
 func DeleteElement(slice []int, index int) []int {
 	return append(slice[:index], slice[index+1:]...)
 }
+
+func IsError(err error) bool {
+	return err != nil
+}
