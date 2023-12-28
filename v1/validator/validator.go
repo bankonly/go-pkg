@@ -11,6 +11,7 @@ import (
 	"github.com/bankonly/go-pkg/v1/common"
 	"github.com/bankonly/go-pkg/v1/encryption"
 	"github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 	"github.com/leebenson/conform"
 )
 
@@ -70,20 +71,28 @@ func RsaParser(body io.Reader, out interface{}) error {
 		return errors.New(getBadRequestError())
 	}
 
-	log.Println(data.Data)
 	cipherText, enk, iv := encryption.FromAuthorization(data.Data)
 	result, err := encryption.RSADecAESRandomKey(enk, cipherText, iv)
 	if err != nil {
-		return err
+		return errors.New("bad_credential")
 	}
 
 	if err = common.JsonDecode(result, out); err != nil {
-		return err
+		return errors.New("bad_data")
 	}
 
 	if err := ValidateStruct(out); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+func ParseUUID(value *string) error {
+	uuidValue, err := uuid.Parse(*value)
+	if err != nil {
+		return err
+	}
+	*value = uuidValue.String()
 	return nil
 }
