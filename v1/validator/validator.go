@@ -27,6 +27,7 @@ func GetValidator() *validator.Validate {
 // Initialized validator instance
 func NewValidator() {
 	validate = validator.New(validator.WithRequiredStructEnabled())
+	(&Custom{}).InitCustomValidation()
 	validate.RegisterTagNameFunc(func(fld reflect.StructField) string {
 		name := strings.SplitN(fld.Tag.Get(getErrorField()), ",", 2)[0]
 		if name == "-" {
